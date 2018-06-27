@@ -15,19 +15,12 @@ struct Point {
 // }
 
 fn main() {
-    let r1: Vec<Point> = Vec::new();
-    let r2: Vec<Point> = Vec::new();
-    let r3: Vec<Point> = Vec::new();
-    let r4: Vec<Point> = Vec::new();
-    let r5: Vec<Point> = Vec::new();
-
     let mut m: Vec<Vec<Point>> = Vec::new();
 
-    m.push(r1);
-    m.push(r2);
-    m.push(r3);
-    m.push(r4);
-    m.push(r5);
+    for i in 1..=10 {
+        let r: Vec<Point> = Vec::new();
+        m.push(r);
+    }
 
     let mut j = 0;
 
