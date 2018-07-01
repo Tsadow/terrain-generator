@@ -23,11 +23,14 @@ const FLOR: i32 = 0;
 const CEIL: i32 = 25;
 // aggressiveness of changes from point to point such each point can be ±AGGR from neighboring points
 const AGGR: i32 = 3;
+// size of matrix
+const HEIGHT: usize = 20;
+const WIDTH: usize = 80;
 
 fn main() {
     let mut m: Vec<Vec<Point>> = Vec::new();
 
-    for i in 1..=10 {
+    for i in 1..=HEIGHT {
         let mut r: Vec<Point> = Vec::new();
         m.push(r);
     }
@@ -42,26 +45,24 @@ fn main() {
     let mut j: i32 = 0;
 
     for mut r in m {
-        let mut j0: usize = j as usize;
-        for i in 1..=10 {
-            let mut i0: usize = i as usize;
+        for i in 1..=WIDTH {
 
             // check for anything north of current point
-            let n_opt = prev_row.get(i0);
+            let n_opt = prev_row.get(i);
             match n_opt {
                 // nothing north of current point
                 None => {
                     if w > 0 {
                         // base on value to the west only
-                        let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(w - AGGR, w), rand::thread_rng().gen_range(w, w+AGGR));
-                        r.push(Point::new(j, rand_y, i));
+                        let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(w - AGGR, w), rand::thread_rng().gen_range(w, w + AGGR));
+                        r.push(Point::new(j, rand_y, i as i32));
 
                         w = rand_y;
                         curr_row.push(rand_y);
                     } else {
                         // base on no external value
                         let rand_y = rand::thread_rng().gen_range(FLOR, CEIL);
-                        r.push(Point::new(j, rand_y, i));
+                        r.push(Point::new(j, rand_y, i as i32));
 
                         w = rand_y;
                         curr_row.push(rand_y);
@@ -70,7 +71,7 @@ fn main() {
                 // something north of current point
                 Some(n_val) => {
                     // check for anything northwest of current point
-                    let nw_opt = prev_row.get(i0 - 1);
+                    let nw_opt = prev_row.get(i - 1);
                     match nw_opt {
                         // nothing northwest of current point
                         None => {
@@ -79,14 +80,14 @@ fn main() {
                                 // base on value to north and west only
                                 // let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(FLOR, w), rand::thread_rng().gen_range(w, CEIL));
                                 let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
-                                r.push(Point::new(j, rand_y, i));
+                                r.push(Point::new(j, rand_y, i as i32));
 
                                 w = rand_y;
                                 curr_row.push(rand_y);
                             } else {
                                 // Base on value to north only
                                 let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
-                                r.push(Point::new(j, rand_y, i));
+                                r.push(Point::new(j, rand_y, i as i32));
 
                                 w = rand_y;
                                 curr_row.push(rand_y);
@@ -97,7 +98,7 @@ fn main() {
                             if w > 0 {
                                 // base on all values to north, northwest, west
                                 let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
-                                r.push(Point::new(j, rand_y, i));
+                                r.push(Point::new(j, rand_y, i as i32));
 
                                 w = rand_y;
                                 curr_row.push(rand_y);
@@ -105,7 +106,7 @@ fn main() {
                                 // branch should never be true
                                 // base on values to north and northwest only
                                 let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
-                                r.push(Point::new(j, rand_y, i));
+                                r.push(Point::new(j, rand_y, i as i32));
 
                                 w = rand_y;
                                 curr_row.push(rand_y);
