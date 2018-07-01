@@ -69,50 +69,24 @@ fn main() {
                     }    
                 },
                 // something north of current point
-                Some(n_val) => {
-                    // check for anything northwest of current point
-                    let nw_opt = prev_row.get(i - 1);
-                    match nw_opt {
-                        // nothing northwest of current point
-                        None => {
-                            if w > 0 {
-                                // branch should never be true
-                                // base on value to north and west only
-                                // let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(FLOR, w), rand::thread_rng().gen_range(w, CEIL));
-                                let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
-                                r.push(Point::new(j, rand_y, i as i32));
+                Some(n_val) => {   
+                    if w > 0 {
+                        // branch should never be true
+                        // base on value to north and west only
+                        // let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(FLOR, w), rand::thread_rng().gen_range(w, CEIL));
+                        let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
+                        r.push(Point::new(j, rand_y, i as i32));
 
-                                w = rand_y;
-                                curr_row.push(rand_y);
-                            } else {
-                                // Base on value to north only
-                                let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
-                                r.push(Point::new(j, rand_y, i as i32));
+                        w = rand_y;
+                        curr_row.push(rand_y);
+                    } else {
+                        // Base on value to north only
+                        let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
+                        r.push(Point::new(j, rand_y, i as i32));
 
-                                w = rand_y;
-                                curr_row.push(rand_y);
-                            } 
-                        },
-                        // something northwest of current point
-                        Some(nw_val) => {
-                            if w > 0 {
-                                // base on all values to north, northwest, west
-                                let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
-                                r.push(Point::new(j, rand_y, i as i32));
-
-                                w = rand_y;
-                                curr_row.push(rand_y);
-                            } else {
-                                // branch should never be true
-                                // base on values to north and northwest only
-                                let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
-                                r.push(Point::new(j, rand_y, i as i32));
-
-                                w = rand_y;
-                                curr_row.push(rand_y);
-                            } 
-                        }
-                    }
+                        w = rand_y;
+                        curr_row.push(rand_y);
+                    }                         
                 },
             }
 
