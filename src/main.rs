@@ -1,6 +1,8 @@
 extern crate rand;
 
 use rand::Rng;
+use std::cmp::min;
+use std::cmp::max;
 
 struct Point {
     x: i32,
@@ -19,7 +21,7 @@ impl Point {
 }
 
 // floor and ceiling of terrain
-const FLOR: i32 = 0;
+const FLOR: i32 = 1;
 const CEIL: i32 = 25;
 // aggressiveness of changes from point to point such each point can be ±AGGR from neighboring points
 const AGGR: i32 = 3;
@@ -56,14 +58,14 @@ fn main() {
                         // base on value to the west only
                         let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(w - AGGR, w), rand::thread_rng().gen_range(w, w + AGGR));
                         r.push(Point::new(j, rand_y, i as i32));
-
+                        // print!("{:03} ", rand_y);
                         w = rand_y;
                         curr_row.push(rand_y);
                     } else {
                         // base on no external value
                         let rand_y = rand::thread_rng().gen_range(FLOR, CEIL);
                         r.push(Point::new(j, rand_y, i as i32));
-
+                        // print!("{:03} ", rand_y);
                         w = rand_y;
                         curr_row.push(rand_y);
                     }    
@@ -72,18 +74,42 @@ fn main() {
                 Some(n_val) => {   
                     if w > 0 {
                         // branch should never be true
-                        // base on value to north and west only
+                        // base on value to north and west
                         // let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(FLOR, w), rand::thread_rng().gen_range(w, CEIL));
-                        let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
-                        r.push(Point::new(j, rand_y, i as i32));
 
-                        w = rand_y;
-                        curr_row.push(rand_y);
+                        let n_lower = rand::thread_rng().gen_range(*n_val - AGGR, *n_val);
+                        let n_upper = rand::thread_rng().gen_range(*n_val, *n_val + AGGR);
+
+                        let rand_n = rand::thread_rng().gen_range(n_lower, n_upper);
+
+                        let w_lower = rand::thread_rng().gen_range(w - AGGR, w);
+                        let w_upper = rand::thread_rng().gen_range(w, w + AGGR);
+
+                        let rand_w = rand::thread_rng().gen_range(w_lower, w_upper);
+
+                        if rand_n == rand_w {
+                            // if they're the same it panics
+                            let rand_y = rand::thread_rng().gen_range(rand_n - AGGR, rand_n + AGGR);
+                            r.push(Point::new(j, rand_y, i as i32));
+                            // print!("{:03} ", rand_y);
+                            w = rand_y;
+                            curr_row.push(rand_y);
+                        } else {
+                            let rand_y = rand::thread_rng().gen_range(min(rand_n, rand_w), max(rand_n, rand_w));
+                            r.push(Point::new(j, rand_y, i as i32));
+                            // print!("{:03} ", rand_y);
+                            w = rand_y;
+                            curr_row.push(rand_y);
+                        }                        
                     } else {
                         // Base on value to north only
-                        let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(*n_val - AGGR, *n_val), rand::thread_rng().gen_range(*n_val, *n_val + AGGR));
-                        r.push(Point::new(j, rand_y, i as i32));
 
+                        let n_lower = rand::thread_rng().gen_range(*n_val - AGGR, *n_val);
+                        let n_upper = rand::thread_rng().gen_range(*n_val, *n_val + AGGR);
+
+                        let rand_y = rand::thread_rng().gen_range(n_lower, n_upper);
+                        r.push(Point::new(j, rand_y, i as i32));
+                        // print!("{:03} ", rand_y);
                         w = rand_y;
                         curr_row.push(rand_y);
                     }                         
