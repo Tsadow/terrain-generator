@@ -22,9 +22,10 @@ impl Point {
 
 // floor and ceiling of terrain
 const FLOR: i32 = 1;
-const CEIL: i32 = 31;
+const CEIL: i32 = 21;
 // aggressiveness of changes from point to point such each point can be ±AGGR from neighboring points
-const AGGR: i32 = 4;
+const NEG_AGGR: i32 = 2;
+const POS_AGGR: i32 = 5;
 // size of matrix
 const HEIGHT: usize = 20;
 const WIDTH: usize = 75;
@@ -56,8 +57,8 @@ fn main() {
                 None => {
                     if w > FLOR - 1 {
                         // base on value to the west only
-                        let mut w_lower = rand::thread_rng().gen_range(w - AGGR, w);
-                        let mut w_upper = rand::thread_rng().gen_range(w, w + AGGR);
+                        let mut w_lower = rand::thread_rng().gen_range(w - NEG_AGGR, w);
+                        let mut w_upper = rand::thread_rng().gen_range(w, w + POS_AGGR);
 
                         if w_lower > CEIL {
                             w_lower = CEIL;
@@ -74,10 +75,10 @@ fn main() {
 
                         if w_upper == w_lower {
                             if w_upper == CEIL{
-                                w_lower = CEIL - AGGR;
+                                w_lower = CEIL - POS_AGGR;
                             }
                             if w_lower == FLOR {
-                                w_upper = FLOR + AGGR;
+                                w_upper = FLOR + NEG_AGGR;
                             }
                         }
 
@@ -102,13 +103,13 @@ fn main() {
                         // base on value to north and west
                         // let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(FLOR, w), rand::thread_rng().gen_range(w, CEIL));
 
-                        let n_lower = rand::thread_rng().gen_range(*n_val - AGGR, *n_val);
-                        let n_upper = rand::thread_rng().gen_range(*n_val, *n_val + AGGR);
+                        let n_lower = rand::thread_rng().gen_range(*n_val - NEG_AGGR, *n_val);
+                        let n_upper = rand::thread_rng().gen_range(*n_val, *n_val + POS_AGGR);
 
                         let mut rand_n = rand::thread_rng().gen_range(n_lower, n_upper);
 
-                        let w_lower = rand::thread_rng().gen_range(w - AGGR, w);
-                        let w_upper = rand::thread_rng().gen_range(w, w + AGGR);
+                        let w_lower = rand::thread_rng().gen_range(w - NEG_AGGR, w);
+                        let w_upper = rand::thread_rng().gen_range(w, w + POS_AGGR);
 
                         let mut rand_w = rand::thread_rng().gen_range(w_lower, w_upper);
 
@@ -127,8 +128,8 @@ fn main() {
 
                         if rand_n == rand_w {
                             // if they're the same it panics
-                            rand_n = rand_n - AGGR;
-                            rand_w = rand_n + AGGR;
+                            rand_n = rand_n - NEG_AGGR;
+                            rand_w = rand_n + NEG_AGGR;
                         } 
 
                         let rand_y = rand::thread_rng().gen_range(min(rand_n, rand_w), max(rand_n, rand_w));
@@ -139,8 +140,8 @@ fn main() {
                     } else {
                         // Base on value to north only
 
-                        let mut n_lower = rand::thread_rng().gen_range(*n_val - AGGR, *n_val);
-                        let mut n_upper = rand::thread_rng().gen_range(*n_val, *n_val + AGGR);
+                        let mut n_lower = rand::thread_rng().gen_range(*n_val - NEG_AGGR, *n_val);
+                        let mut n_upper = rand::thread_rng().gen_range(*n_val, *n_val + POS_AGGR);
 
                         if n_lower > CEIL {
                             n_lower = CEIL;
@@ -157,10 +158,10 @@ fn main() {
 
                         if n_upper == n_lower {
                             if n_upper == CEIL{
-                                n_lower = CEIL - AGGR;
+                                n_lower = CEIL - POS_AGGR;
                             }
                             if n_lower == FLOR {
-                                n_upper = FLOR + AGGR;
+                                n_upper = FLOR + NEG_AGGR;
                             }
                         }
 
