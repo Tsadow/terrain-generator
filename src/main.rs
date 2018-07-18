@@ -99,7 +99,6 @@ fn main() {
                 // something north of current point
                 Some(n_val) => {   
                     if w > FLOR - 1 {
-                        // branch should never be true
                         // base on value to north and west
                         // let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(FLOR, w), rand::thread_rng().gen_range(w, CEIL));
 
@@ -128,8 +127,8 @@ fn main() {
 
                         if rand_n == rand_w {
                             // if they're the same it panics
-                            rand_n = rand_n - NEG_AGGR;
-                            rand_w = rand_n + NEG_AGGR;
+                            rand_n = max(rand_n - NEG_AGGR, FLOR);
+                            rand_w = min(rand_n + NEG_AGGR, CEIL);
                         } 
 
                         let rand_y = rand::thread_rng().gen_range(min(rand_n, rand_w), max(rand_n, rand_w));
