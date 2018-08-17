@@ -23,8 +23,9 @@ impl Point {
 }
 
 // floor and ceiling of terrain
+// it's recommended that CEIL - FLOR is evenly divisible by 6 for color visuialization to work best
 const FLOR: i32 = 1;
-const CEIL: i32 = 31;
+const CEIL: i32 = 13;
 // aggressiveness of changes from point to point such each point can be ±AGGR from neighboring points
 const NEG_AGGR: i32 = 2;
 const POS_AGGR: i32 = 5;
