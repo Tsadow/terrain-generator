@@ -33,6 +33,10 @@ const HEIGHT: usize = 20;
 const WIDTH: usize = 70;
 
 fn main() {
+    let height_map = gen_height_map();
+}
+
+fn gen_height_map() -> Vec<Vec<Point>> {
     let mut m: Vec<Vec<Point>> = Vec::new();
 
     for i in 1..=HEIGHT {
@@ -49,7 +53,7 @@ fn main() {
 
     let mut j: i32 = 0;
 
-    for mut r in m {
+    for mut r in &mut m {
         for i in 1..=WIDTH {
 
             // check for anything north of current point
@@ -188,7 +192,7 @@ fn main() {
         // get number of numbers in each color
         let color_steps: i32 = (CEIL - FLOR)/6;
 
-        for p in &r {
+        for p in r {
             let mut out: ColoredString = "".to_string().white();
 
             // color the output string based on y value so it's clearer how tall things are in terminal output
@@ -216,4 +220,6 @@ fn main() {
 
         j += 1;
     }
+
+    m
 }
