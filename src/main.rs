@@ -1,8 +1,10 @@
 extern crate rand;
+extern crate colored;
 
 use rand::Rng;
 use std::cmp::min;
 use std::cmp::max;
+use colored::*;
 
 struct Point {
     x: i32,
@@ -22,13 +24,13 @@ impl Point {
 
 // floor and ceiling of terrain
 const FLOR: i32 = 1;
-const CEIL: i32 = 21;
+const CEIL: i32 = 31;
 // aggressiveness of changes from point to point such each point can be ±AGGR from neighboring points
 const NEG_AGGR: i32 = 2;
 const POS_AGGR: i32 = 5;
 // size of matrix
 const HEIGHT: usize = 20;
-const WIDTH: usize = 75;
+const WIDTH: usize = 70;
 
 fn main() {
     let mut m: Vec<Vec<Point>> = Vec::new();
@@ -183,8 +185,32 @@ fn main() {
         let curr_row: Vec<i32> = Vec::new();
         w = 0;
 
+        // get number of numbers in each color
+        let color_steps: i32 = (CEIL - FLOR)/6;
+
         for p in &r {
-            print!("{:03} ", p.y.to_string());
+            let mut out: ColoredString = "".to_string().white();
+
+            // color the output string based on y value so it's clearer how tall things are in terminal output
+            if p.y < FLOR {
+                out = p.y.to_string().black();
+            } else if p.y <= color_steps {
+                out = p.y.to_string().magenta();
+            } else if p.y <= color_steps*2 {
+                out = p.y.to_string().blue();
+            } else if p.y <= color_steps*3 {
+                out = p.y.to_string().cyan();
+            } else if p.y <= color_steps*4 {
+                out = p.y.to_string().green();
+            } else if p.y <= color_steps*5 {
+                out = p.y.to_string().yellow();
+            } else if p.y <= color_steps*6 {
+                out = p.y.to_string().red();
+            } else {
+                out = p.y.to_string().white();
+            }
+
+            print!("{:03} ", out);
         }
         println!("");
 

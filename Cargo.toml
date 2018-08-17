@@ -5,3 +5,4 @@ authors = ["Tom Castle <minifigone@gmail.com>"]
 
 [dependencies]
 rand = "0.5"
+colored = "1.6"
