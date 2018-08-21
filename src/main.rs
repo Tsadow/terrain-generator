@@ -1,3 +1,8 @@
+//! Tom Castle (@Tsadow)
+//! 2018
+//! 
+//! Random terrain height map generation
+
 extern crate rand;
 extern crate colored;
 
@@ -22,25 +27,26 @@ impl Point {
     }
 }
 
-// floor and ceiling of terrain
-// it's recommended that CEIL - FLOR is evenly divisible by 6 for color visuialization to work best
-const FLOR: i32 = 1;
-const CEIL: i32 = 13;
-// aggressiveness of changes from point to point such each point can be ±AGGR from neighboring points
-const NEG_AGGR: i32 = 2;
-const POS_AGGR: i32 = 5;
-// size of matrix
-const HEIGHT: usize = 20;
-const WIDTH: usize = 70;
-
 fn main() {
-    let height_map = gen_height_map();
+    let height_map = gen_height_map(1, 13, 2, 5, 20, 50);
 }
 
-fn gen_height_map() -> Vec<Vec<Point>> {
+/// Generates height map based on supplied parameters
+/// 
+/// ### Parameters
+/// ##### Generation Boundaries
+/// `flor`: lowest possible value of terrain
+/// `ceil`: highest possible value of terrain
+/// ##### Aggressiveness: how far each point can possibly be from each other
+/// `neg_aggr`: negative aggressiveness
+/// `pos_aggr`: positive aggressiveness
+/// ##### Output Boundaries
+/// `height`: z-number of output
+/// `width`: x-number of output
+fn gen_height_map(flor: i32, ceil: i32, neg_aggr: i32, pos_aggr: i32, height: usize, width: usize) -> Vec<Vec<Point>> {
     let mut m: Vec<Vec<Point>> = Vec::new();
 
-    for i in 1..=HEIGHT {
+    for i in 1..=height {
         let mut r: Vec<Point> = Vec::new();
         m.push(r);
     }
@@ -50,42 +56,42 @@ fn gen_height_map() -> Vec<Vec<Point>> {
     let mut prev_row: Vec<i32> = Vec::new();
 
     // point west of current point; initialized to 0
-    let mut w = FLOR - 1;
+    let mut w = flor - 1;
 
     let mut j: i32 = 0;
 
     for mut r in &mut m {
-        for i in 1..=WIDTH {
+        for i in 1..=width {
 
             // check for anything north of current point
             let n_opt = prev_row.get(i);
             match n_opt {
                 // nothing north of current point
                 None => {
-                    if w > FLOR - 1 {
+                    if w > flor - 1 {
                         // base on value to the west only
-                        let mut w_lower = rand::thread_rng().gen_range(w - NEG_AGGR, w);
-                        let mut w_upper = rand::thread_rng().gen_range(w, w + POS_AGGR);
+                        let mut w_lower = rand::thread_rng().gen_range(w - neg_aggr, w);
+                        let mut w_upper = rand::thread_rng().gen_range(w, w + pos_aggr);
 
-                        if w_lower > CEIL {
-                            w_lower = CEIL;
+                        if w_lower > ceil {
+                            w_lower = ceil;
                         }
-                        if w_lower < FLOR {
-                            w_lower = FLOR;
+                        if w_lower < flor {
+                            w_lower = flor;
                         }
-                        if w_upper > CEIL {
-                            w_upper = CEIL;
+                        if w_upper > ceil {
+                            w_upper = ceil;
                         }
-                        if w_upper < FLOR {
-                            w_upper = FLOR;
+                        if w_upper < flor {
+                            w_upper = flor;
                         }
 
                         if w_upper == w_lower {
-                            if w_upper == CEIL{
-                                w_lower = CEIL - POS_AGGR;
+                            if w_upper == ceil{
+                                w_lower = ceil - pos_aggr;
                             }
-                            if w_lower == FLOR {
-                                w_upper = FLOR + NEG_AGGR;
+                            if w_lower == flor {
+                                w_upper = flor + neg_aggr;
                             }
                         }
 
@@ -96,7 +102,7 @@ fn gen_height_map() -> Vec<Vec<Point>> {
                         curr_row.push(rand_y);
                     } else {
                         // base on no external value
-                        let rand_y = rand::thread_rng().gen_range(FLOR, CEIL);
+                        let rand_y = rand::thread_rng().gen_range(flor, ceil);
                         r.push(Point::new(j, rand_y, i as i32));
                         // print!("{:03} ", rand_y);
                         w = rand_y;
@@ -105,37 +111,37 @@ fn gen_height_map() -> Vec<Vec<Point>> {
                 },
                 // something north of current point
                 Some(n_val) => {   
-                    if w > FLOR - 1 {
+                    if w > flor - 1 {
                         // base on value to north and west
-                        // let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(FLOR, w), rand::thread_rng().gen_range(w, CEIL));
+                        // let rand_y = rand::thread_rng().gen_range(rand::thread_rng().gen_range(flor, w), rand::thread_rng().gen_range(w, ceil));
 
-                        let n_lower = rand::thread_rng().gen_range(*n_val - NEG_AGGR, *n_val);
-                        let n_upper = rand::thread_rng().gen_range(*n_val, *n_val + POS_AGGR);
+                        let n_lower = rand::thread_rng().gen_range(*n_val - neg_aggr, *n_val);
+                        let n_upper = rand::thread_rng().gen_range(*n_val, *n_val + pos_aggr);
 
                         let mut rand_n = rand::thread_rng().gen_range(n_lower, n_upper);
 
-                        let w_lower = rand::thread_rng().gen_range(w - NEG_AGGR, w);
-                        let w_upper = rand::thread_rng().gen_range(w, w + POS_AGGR);
+                        let w_lower = rand::thread_rng().gen_range(w - neg_aggr, w);
+                        let w_upper = rand::thread_rng().gen_range(w, w + pos_aggr);
 
                         let mut rand_w = rand::thread_rng().gen_range(w_lower, w_upper);
 
-                        if rand_n > CEIL {
-                            rand_n = CEIL;
+                        if rand_n > ceil {
+                            rand_n = ceil;
                         }
-                        if rand_n < FLOR {
-                            rand_n = FLOR;
+                        if rand_n < flor {
+                            rand_n = flor;
                         }
-                        if rand_w > CEIL {
-                            rand_w = CEIL;
+                        if rand_w > ceil {
+                            rand_w = ceil;
                         }
-                        if rand_w < FLOR {
-                            rand_w = FLOR;
+                        if rand_w < flor {
+                            rand_w = flor;
                         }
 
                         if rand_n == rand_w {
                             // if they're the same it panics
-                            rand_n = max(rand_n - NEG_AGGR, FLOR);
-                            rand_w = min(rand_n + NEG_AGGR, CEIL);
+                            rand_n = max(rand_n - neg_aggr, flor);
+                            rand_w = min(rand_n + neg_aggr, ceil);
                         } 
 
                         let rand_y = rand::thread_rng().gen_range(min(rand_n, rand_w), max(rand_n, rand_w));
@@ -146,28 +152,28 @@ fn gen_height_map() -> Vec<Vec<Point>> {
                     } else {
                         // Base on value to north only
 
-                        let mut n_lower = rand::thread_rng().gen_range(*n_val - NEG_AGGR, *n_val);
-                        let mut n_upper = rand::thread_rng().gen_range(*n_val, *n_val + POS_AGGR);
+                        let mut n_lower = rand::thread_rng().gen_range(*n_val - 2*neg_aggr, *n_val);
+                        let mut n_upper = rand::thread_rng().gen_range(*n_val, *n_val + pos_aggr);
 
-                        if n_lower > CEIL {
-                            n_lower = CEIL;
+                        if n_lower > ceil {
+                            n_lower = ceil;
                         }
-                        if n_lower < FLOR {
-                            n_lower = FLOR;
+                        if n_lower < flor {
+                            n_lower = flor;
                         }
-                        if n_upper > CEIL {
-                            n_upper = CEIL;
+                        if n_upper > ceil {
+                            n_upper = ceil;
                         }
-                        if n_upper < FLOR {
-                            n_upper = FLOR;
+                        if n_upper < flor {
+                            n_upper = flor;
                         }
 
                         if n_upper == n_lower {
-                            if n_upper == CEIL{
-                                n_lower = CEIL - POS_AGGR;
+                            if n_upper == ceil{
+                                n_lower = ceil - pos_aggr;
                             }
-                            if n_lower == FLOR {
-                                n_upper = FLOR + NEG_AGGR;
+                            if n_lower == flor {
+                                n_upper = flor + neg_aggr;
                             }
                         }
 
@@ -191,13 +197,13 @@ fn gen_height_map() -> Vec<Vec<Point>> {
         w = 0;
 
         // get number of numbers in each color
-        let color_steps: i32 = (CEIL - FLOR)/6;
+        let color_steps: i32 = (ceil - flor)/6;
 
         for p in r {
             let mut out: ColoredString = "".to_string().white();
 
             // color the output string based on y value so it's clearer how tall things are in terminal output
-            if p.y < FLOR {
+            if p.y < flor {
                 out = p.y.to_string().black();
             } else if p.y <= color_steps {
                 out = p.y.to_string().magenta();

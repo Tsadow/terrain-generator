@@ -1,3 +1,7 @@
+# Environment
 /target
 **/*.rs.bk
 .vscode/
+
+# Other
+good-run.txt
