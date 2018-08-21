@@ -28,13 +28,13 @@ impl Point {
 }
 
 fn main() {
-    let height_map = gen_height_map(1, 13, 2, 5, 20, 50);
+    let height_map = gen_height_map(1, 13, 2, 5, 40, 40);
 }
 
 /// Generates height map based on supplied parameters
 /// 
 /// ### Parameters
-/// ##### Generation Boundaries
+/// ##### Generation Boundaries: it is recommended that (ceil-flor)%6 = 0
 /// `flor`: lowest possible value of terrain
 /// `ceil`: highest possible value of terrain
 /// ##### Aggressiveness: how far each point can possibly be from each other
@@ -46,7 +46,7 @@ fn main() {
 fn gen_height_map(flor: i32, ceil: i32, neg_aggr: i32, pos_aggr: i32, height: usize, width: usize) -> Vec<Vec<Point>> {
     let mut m: Vec<Vec<Point>> = Vec::new();
 
-    for i in 1..=height {
+    for _i in 1..=height {
         let mut r: Vec<Point> = Vec::new();
         m.push(r);
     }
@@ -228,5 +228,6 @@ fn gen_height_map(flor: i32, ceil: i32, neg_aggr: i32, pos_aggr: i32, height: us
         j += 1;
     }
 
+    // return
     m
 }
