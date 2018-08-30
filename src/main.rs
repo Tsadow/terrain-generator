@@ -61,7 +61,7 @@ fn gen_height_map(flor: i32, ceil: i32, neg_aggr: i32, pos_aggr: i32, height: us
     let mut j: i32 = 0;
 
     for mut r in &mut m {
-        for i in 1..=width {
+        for i in 0..=width {
 
             // check for anything north of current point
             let n_opt = prev_row.get(i);
