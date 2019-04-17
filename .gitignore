@@ -2,6 +2,7 @@
 /target
 **/*.rs.bk
 .vscode/
+.idea/
 
 # Other
 good-run.txt
