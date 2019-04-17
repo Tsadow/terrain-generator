@@ -223,7 +223,7 @@ fn gen_height_map(flor: i32, ceil: i32, neg_aggr: i32, pos_aggr: i32, height: us
 
             print!("{:03} ", out);
         }
-        println!("");
+        println!();
 
         j += 1;
     }
