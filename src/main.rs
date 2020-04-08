@@ -28,7 +28,7 @@ impl Point {
 }
 
 fn main() {
-    let height_map = gen_height_map(1, 13, 2, 5, 40, 40);
+    let height_map = gen_height_map(2, 8, 1, 5, 16, 16);
 }
 
 /// Generates height map based on supplied parameters
@@ -61,7 +61,7 @@ fn gen_height_map(flor: i32, ceil: i32, neg_aggr: i32, pos_aggr: i32, height: us
     let mut j: i32 = 0;
 
     for mut r in &mut m {
-        for i in 0..=width {
+        for i in 0..width {
 
             // check for anything north of current point
             let n_opt = prev_row.get(i);
@@ -221,9 +221,9 @@ fn gen_height_map(flor: i32, ceil: i32, neg_aggr: i32, pos_aggr: i32, height: us
                 out = p.y.to_string().white();
             }
 
-            print!("{:03} ", out);
+            print!(" {}", out);
         }
-        println!();
+        println!(";");
 
         j += 1;
     }
